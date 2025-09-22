@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>Powerbank</title>
+    <style>
+        :root {
+            --primary: #22223b;
+            --accent: #4a4e69;
+            --light: #f2e9e4;
+            --highlight: #9a8c98;
+            --white: #fff;
+        }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+            min-height: 100vh;
+        }
+        header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.2s;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        nav a:hover, nav a.active {
+            color: var(--highlight);
+        }
+        /* Mobile Nav */
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 70vw;
+            max-width: 300px;
+            height: 100vh;
+            background: var(--primary);
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            flex-direction: column;
+            padding: 2rem 1.5rem;
+            z-index: 200;
+            gap: 1.5rem;
+            animation: slideIn 0.2s;
+        }
+        @keyframes slideIn {
+            from { right: -300px; opacity: 0; }
+            to { right: 0; opacity: 1; }
+        }
+        .mobile-nav a {
+            font-size: 1.2rem;
+            color: var(--white);
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--accent);
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: 150;
+        }
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 2px 16px rgba(34,34,59,0.07);
+        }
+        section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+        section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        h1, h2 {
+            color: var(--accent);
+            margin-top: 0;
+        }
+        @media (max-width: 700px) {
+            header {
+                padding: 1rem;
+            }
+            nav {
+                display: none;
+            }
+            .nav-toggle {
+                display: block;
+            }
+            main {
+                margin: 1rem;
+                padding: 0.7rem;
+            }
+        }
+        @media (max-width: 500px) {
+            main {
+                padding: 0.3rem;
+            }
+            .logo {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Powerbank</div>
+        <nav>
+            <a href="#home" class="active">Home</a>
+            <a href="#about">About</a>
+            <a href="#mission">Mission</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <button class="nav-toggle" aria-label="Open navigation">&#9776;</button>
+    </header>
+    <div class="overlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#home" class="active">Home</a>
+        <a href="#about">About</a>
+        <a href="#mission">Mission</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <main>
+        <section id="home">
+            <h1>Welcome to Powerbank</h1>
+            <p>
+                Powerbank is your trusted partner for reliable, portable energy solutions. Whether you're at home, at work, or on the move, our products keep your devices powered up and ready for action.
+            </p>
+        </section>
+        <section id="about">
+            <h2>About Us</h2>
+            <p>
+                Founded with a passion for innovation, Powerbank delivers high-quality, efficient, and stylish power solutions. Our team is dedicated to providing exceptional customer service and the latest in charging technology.
+            </p>
+        </section>
+        <section id="mission">
+            <h2>Our Mission</h2>
+            <p>
+                To empower people everywhere by providing dependable, eco-friendly, and accessible energy solutions. We strive to make staying connected effortless, wherever life takes you.
+            </p>
+        </section>
+        <section id="services">
+            <h2>Our Services</h2>
+            <ul>
+                <li>Wide range of portable powerbanks for all devices</li>
+                <li>Custom branding for corporate clients</li>
+                <li>Fast and secure shipping worldwide</li>
+                <li>24/7 customer support and warranty services</li>
+            </ul>
+        </section>
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>
+                Have questions or need support? Reach out to our team anytime!
+            </p>
+            <ul>
+                <li>Email: support@powerbank.com</li>
+                <li>Phone: +1 234 567 8900</li>
+                <li>Address: 123 Energy Lane, Tech City</li>
+            </ul>
+        </section>
+    </main>
+    <script>
+        const navToggle = document.querySelector('.nav-toggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const overlay = document.querySelector('.overlay');
+        const navLinks = mobileNav.querySelectorAll('a');
+
+        function openNav() {
+            mobileNav.style.display = 'flex';
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeNav() {
+            mobileNav.style.display = 'none';
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        navToggle.addEventListener('click', openNav);
+        overlay.addEventListener('click', closeNav);
+        navLinks.forEach(link => {
+            link.addEventListener('click', closeNav);
+        });
+
+        // Highlight active nav link
+        function setActiveLink() {
+            const hash = window.location.hash || '#home';
+            document.querySelectorAll('nav a, .mobile-nav a').forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === hash);
+            });
+        }
+        window.addEventListener('hashchange', setActiveLink);
+        window.addEventListener('DOMContentLoaded', setActiveLink);
+    </script>
+</body>
+</html>
