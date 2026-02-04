@@ -4,14 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="dark">
-    <title>Powerbank</title>
+    <title>Me TV - ZUT Student News</title>
     <style>
         :root {
-            --primary: #22223b;
-            --accent: #4a4e69;
-            --light: #f2e9e4;
-            --highlight: #9a8c98;
+            --primary: #111111;
+            --accent: #d60000;
+            --light: #f4f4f4;
+            --highlight: #ff3333;
             --white: #fff;
+        }
+        body.dark-mode {
+            --primary: #e0e0e0;
+            --light: #121212;
+            --white: #1e1e1e;
+            --accent: #ff5252;
+            --highlight: #ff8686;
+        }
+        body.dark-mode header, 
+        body.dark-mode .mobile-nav {
+            background: #000;
+        }
+        body.dark-mode nav a,
+        body.dark-mode .mobile-nav a {
+            color: #fff;
+        }
+        body.dark-mode input {
+            background: #2d2d2d;
+            color: #fff;
+            border-color: #444;
         }
         body {
             margin: 0;
@@ -36,6 +56,12 @@
             font-weight: bold;
             letter-spacing: 2px;
         }
+        .date-display {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-left: 1.5rem;
+            margin-right: auto;
+        }
         nav {
             display: flex;
             gap: 2rem;
@@ -50,6 +76,7 @@
         }
         nav a:hover, nav a.active {
             color: var(--highlight);
+            border-bottom: 2px solid var(--highlight);
         }
         /* Mobile Nav */
         .nav-toggle {
@@ -115,10 +142,87 @@
             color: var(--accent);
             margin-top: 0;
         }
+        .breaking-label {
+            background-color: var(--accent);
+            color: white;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .news-meta {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 10px;
+            display: block;
+        }
+        /* Interactive Elements */
+        .theme-btn {
+            background: transparent;
+            border: none;
+            color: var(--white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 10px;
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: var(--highlight); }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            margin-right: 5px;
+        }
+        .btn-outline:hover {
+            background: var(--accent);
+            color: white;
+        }
+        .hidden-content { display: none; }
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
         @media (max-width: 700px) {
             header {
                 padding: 1rem;
             }
+            .theme-btn {
+                margin-left: auto;
+            }
+            .date-display { display: none; }
             nav {
                 display: none;
             }
@@ -142,64 +246,86 @@
 </head>
 <body>
     <header>
-        <div class="logo">Powerbank</div>
+        <div class="logo">Me TV</div>
+        <div class="date-display" id="currentDate"></div>
         <nav>
-            <a href="#home" class="active">Home</a>
-            <a href="#about">About</a>
-            <a href="#mission">Mission</a>
-            <a href="#services">Services</a>
-            <a href="#contact">Contact</a>
+            <a href="index.html">News</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
         </nav>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
         <button class="nav-toggle" aria-label="Open navigation">&#9776;</button>
     </header>
     <div class="overlay"></div>
     <div class="mobile-nav" id="mobileNav">
-        <a href="#home" class="active">Home</a>
-        <a href="#about">About</a>
-        <a href="#mission">Mission</a>
-        <a href="#services">Services</a>
-        <a href="#contact">Contact</a>
+        <a href="index.html">News</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
     </div>
     <main>
-        <section id="home">
-            <h1>Welcome to Powerbank</h1>
+        <section id="top-stories">
+            <span class="breaking-label">Breaking News</span>
+            <h1>ZUT SRC Elections: Candidates Debate Student Welfare</h1>
+            <span class="news-meta">Updated 2 hours ago | By Me TV Team</span>
             <p>
-                Powerbank is your trusted partner for reliable, portable energy solutions. Whether you're at home, at work, or on the move, our products keep your devices powered up and ready for action.
+                The race for the Student Representative Council presidency heats up as candidates faced off in the Great Hall today. Key topics included tuition fees, accommodation, and campus Wi-Fi improvements.
+            </p>
+            <div id="more-content" class="hidden-content">
+                <p>Incumbent president highlighted achievements in cafeteria subsidies, while the opposition promised a complete overhaul of the hostel allocation system. Voting begins next Monday at the Student Centre. Students are urged to bring their IDs.</p>
+            </div>
+            <button class="btn" id="read-more-btn">Read Full Story</button>
+        </section>
+        <section id="world">
+            <h2>Campus Updates</h2>
+            <p>
+                <strong>Hostel Renovations:</strong> The administration has announced that Block C will undergo renovations starting next month. Students affected will be temporarily reassigned.
+            </p>
+            <button class="btn btn-outline" onclick="react('like', 'Campus News')">Like</button>
+            <button class="btn btn-outline" onclick="react('share', 'Campus News')">Share</button>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 1rem 0;">
+            <p>
+                <strong>Cultural Night:</strong> The annual International Cultural Night is set for Friday. Tickets are available at the Student Union building.
+            </p>
+            <button class="btn btn-outline" onclick="react('like', 'Events')">Like</button>
+            <button class="btn btn-outline" onclick="react('share', 'Events')">Share</button>
+        </section>
+        <section id="tech">
+            <h2>Academics & Innovation</h2>
+            <p>
+                <strong>Exam Schedule Released:</strong> The final exam timetable for the semester has been published on the student portal. Please check for any clashes.
+            </p>
+            <button class="btn btn-outline" onclick="react('like', 'Academics')">Like</button>
+            <button class="btn btn-outline" onclick="react('share', 'Academics')">Share</button>
+            <br><br>
+            <p>
+                <strong>ZUT Tech Fair:</strong> Computer Science students showcased a new AI-driven attendance system at the annual ZUT Tech Fair yesterday.
             </p>
         </section>
-        <section id="about">
-            <h2>About Us</h2>
-            <p>
-                Founded with a passion for innovation, Powerbank delivers high-quality, efficient, and stylish power solutions. Our team is dedicated to providing exceptional customer service and the latest in charging technology.
-            </p>
-        </section>
-        <section id="mission">
-            <h2>Our Mission</h2>
-            <p>
-                To empower people everywhere by providing dependable, eco-friendly, and accessible energy solutions. We strive to make staying connected effortless, wherever life takes you.
-            </p>
-        </section>
-        <section id="services">
-            <h2>Our Services</h2>
+        <section id="sports">
+            <h2>ZUT Sports</h2>
             <ul>
-                <li>Wide range of portable powerbanks for all devices</li>
-                <li>Custom branding for corporate clients</li>
-                <li>Fast and secure shipping worldwide</li>
-                <li>24/7 customer support and warranty services</li>
+                <li><strong>Football:</strong> ZUT Warriors defeat UNZA in a friendly match 2-1.</li>
+                <li><strong>Basketball:</strong> Inter-hostel basketball tournament finals set for Saturday at the Sports Complex.</li>
+                <li><strong>Athletics:</strong> ZUT track team qualifies for the National University Games.</li>
             </ul>
+            <div style="margin-top: 1rem;">
+                <input type="text" id="comment-input" placeholder="Add a comment..." style="padding: 8px; width: 60%; border: 1px solid #ccc; border-radius: 4px;">
+                <button class="btn" onclick="postComment()">Post</button>
+            </div>
         </section>
-        <section id="contact">
-            <h2>Contact Us</h2>
-            <p>
-                Have questions or need support? Reach out to our team anytime!
+        <section style="border-top: 2px solid var(--primary); padding-top: 2rem; margin-top: 2rem;">
+            <h3>Subscribe to our Newsletter</h3>
+            <form id="newsletter-form" style="display: flex; gap: 10px; max-width: 400px; margin-bottom: 1rem;">
+                <input type="email" placeholder="Enter your email" required style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <button type="submit" class="btn" style="margin-top: 0;">Subscribe</button>
+            </form>
+            <p style="font-size: 0.9rem; color: #666; text-align: center;">
+                &copy; 2026 Me TV News. All rights reserved.<br>
+                Contact: tips@metv.com | +260 764 603 198
             </p>
-            <ul>
-                <li>Email: support@powerbank.com</li>
-                <li>Phone: +1 234 567 8900</li>
-                <li>Address: 123 Energy Lane, Tech City</li>
-            </ul>
         </section>
     </main>
+    <div id="toast" class="toast">Notification</div>
     <script>
         const navToggle = document.querySelector('.nav-toggle');
         const mobileNav = document.getElementById('mobileNav');
@@ -222,15 +348,74 @@
             link.addEventListener('click', closeNav);
         });
 
-        // Highlight active nav link
+        // 1. Dynamic Date Display
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', dateOptions);
+
+        // 2. Smooth Scrolling & Active Link
         function setActiveLink() {
-            const hash = window.location.hash || '#home';
+            // Get the current page filename (e.g., "index.html", "about.html")
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
             document.querySelectorAll('nav a, .mobile-nav a').forEach(a => {
-                a.classList.toggle('active', a.getAttribute('href') === hash);
+                const linkPage = a.getAttribute('href');
+                // Set the 'active' class if the link's href matches the current page
+                a.classList.toggle('active', linkPage === currentPage);
             });
         }
-        window.addEventListener('hashchange', setActiveLink);
-        window.addEventListener('DOMContentLoaded', setActiveLink);
+
+        // Run on page load to set the active link
+        setActiveLink();
+
+        // 3. Read More Toggle
+        const readMoreBtn = document.getElementById('read-more-btn');
+        readMoreBtn.addEventListener('click', () => {
+            const content = document.getElementById('more-content');
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                readMoreBtn.textContent = 'Read Full Story';
+            } else {
+                content.style.display = 'block';
+                readMoreBtn.textContent = 'Show Less';
+            }
+        });
+
+        // 4. Toast Notification System
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = "toast show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        // 5. Interaction Functions (Global scope for onclick)
+        window.react = function(type, topic) {
+            const action = type === 'like' ? 'Liked' : 'Shared';
+            showToast(`${action} "${topic}"`);
+        };
+
+        window.postComment = function() {
+            const input = document.getElementById('comment-input');
+            if(input.value.trim() !== "") {
+                showToast("Comment posted successfully!");
+                input.value = "";
+            } else {
+                showToast("Please enter a comment first.");
+            }
+        };
+
+        // 6. Newsletter Form
+        document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast("Thanks for subscribing!");
+            e.target.reset();
+        });
+
+        // 7. Dark Mode Toggle
+        const themeBtn = document.getElementById('theme-toggle');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
     </script>
 </body>
 </html>

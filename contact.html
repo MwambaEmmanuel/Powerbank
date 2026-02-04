@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>Contact Us - Me TV News</title>
+    <style>
+        :root {
+            --primary: #111111;
+            --accent: #d60000;
+            --light: #f4f4f4;
+            --highlight: #ff3333;
+            --white: #fff;
+        }
+        body.dark-mode {
+            --primary: #e0e0e0;
+            --light: #121212;
+            --white: #1e1e1e;
+            --accent: #ff5252;
+            --highlight: #ff8686;
+        }
+        body.dark-mode header, 
+        body.dark-mode .mobile-nav { background: #000; }
+        body.dark-mode nav a,
+        body.dark-mode .mobile-nav a { color: #fff; }
+        body.dark-mode input, body.dark-mode textarea { background: #2d2d2d; color: #fff; border-color: #444; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--light); color: var(--primary); min-height: 100vh; }
+        header { background: var(--primary); color: var(--white); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; }
+        .date-display { font-size: 0.9rem; opacity: 0.8; margin-left: 1.5rem; margin-right: auto; }
+        nav { display: flex; gap: 2rem; }
+        nav a { color: var(--white); text-decoration: none; font-size: 1rem; transition: color 0.2s; padding: 0.5rem 0; position: relative; }
+        nav a:hover, nav a.active { color: var(--highlight); border-bottom: 2px solid var(--highlight); }
+        .nav-toggle { display: none; background: none; border: none; color: var(--white); font-size: 2rem; cursor: pointer; }
+        .mobile-nav { display: none; position: fixed; top: 0; right: 0; width: 70vw; max-width: 300px; height: 100vh; background: var(--primary); box-shadow: -2px 0 10px rgba(0,0,0,0.1); flex-direction: column; padding: 2rem 1.5rem; z-index: 200; gap: 1.5rem; animation: slideIn 0.2s; }
+        @keyframes slideIn { from { right: -300px; opacity: 0; } to { right: 0; opacity: 1; } }
+        .mobile-nav a { font-size: 1.2rem; color: var(--white); padding: 0.7rem 0; border-bottom: 1px solid var(--accent); }
+        .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.2); z-index: 150; }
+        main { max-width: 900px; margin: 2rem auto; padding: 1rem; background: var(--white); border-radius: 12px; box-shadow: 0 2px 16px rgba(34,34,59,0.07); }
+        section { margin-bottom: 2.5rem; padding-bottom: 2rem; }
+        h1, h2 { color: var(--accent); margin-top: 0; }
+        .theme-btn { background: transparent; border: none; color: var(--white); font-size: 1.2rem; cursor: pointer; padding: 0 10px; margin-left: auto; transition: transform 0.2s; }
+        .btn { background: var(--accent); color: white; border: none; padding: 8px 16px; cursor: pointer; border-radius: 4px; font-size: 0.9rem; margin-top: 10px; transition: background 0.2s; }
+        .btn:hover { background: var(--highlight); }
+        .toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 4px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+        .contact-form input, .contact-form textarea { padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; font-family: inherit; }
+        .contact-form textarea { min-height: 150px; resize: vertical; }
+        .contact-info { list-style: none; padding: 0; }
+        .contact-info li { margin-bottom: 1rem; font-size: 1.1rem; }
+        @media (max-width: 700px) {
+            header { padding: 1rem; }
+            .theme-btn { margin-left: auto; }
+            .date-display { display: none; }
+            nav { display: none; }
+            .nav-toggle { display: block; }
+            main { margin: 1rem; padding: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Me TV</div>
+        <div class="date-display" id="currentDate"></div>
+        <nav>
+            <a href="index.html">News</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
+        <button class="nav-toggle" aria-label="Open navigation">&#9776;</button>
+    </header>
+    <div class="overlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <a href="index.html">News</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </div>
+    <main>
+        <section id="contact-us">
+            <h1>Contact Us</h1>
+            <p>We'd love to hear from you. Whether you have a news tip, a question, or feedback, please get in touch.</p>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 2rem; border-top: 1px solid #eee; padding-top: 2rem; margin-top: 2rem;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h2>Send a Message</h2>
+                    <form id="contact-form" class="contact-form">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" placeholder="Your Message" required></textarea>
+                        <button type="submit" class="btn" style="margin-top: 0;">Send Message</button>
+                    </form>
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <h2>Our Details</h2>
+                    <ul class="contact-info">
+                        <li><strong>Email:</strong> tips@metv.com</li>
+                        <li><strong>Phone:</strong> +260 764 603 198</li>
+                        <li><strong>Address:</strong> Zambia University College of Technology, Ndola</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div id="toast" class="toast">Notification</div>
+    <script>
+        const navToggle = document.querySelector('.nav-toggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const overlay = document.querySelector('.overlay');
+        const navLinks = mobileNav.querySelectorAll('a');
+
+        function openNav() {
+            mobileNav.style.display = 'flex';
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeNav() {
+            mobileNav.style.display = 'none';
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        navToggle.addEventListener('click', openNav);
+        overlay.addEventListener('click', closeNav);
+        navLinks.forEach(link => {
+            link.addEventListener('click', closeNav);
+        });
+
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', dateOptions);
+
+        function setActiveLink() {
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            document.querySelectorAll('nav a, .mobile-nav a').forEach(a => {
+                const linkPage = a.getAttribute('href');
+                a.classList.toggle('active', linkPage === currentPage);
+            });
+        }
+        setActiveLink();
+
+        const themeBtn = document.getElementById('theme-toggle');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = "toast show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast("Thank you for your message!");
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
