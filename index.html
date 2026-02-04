@@ -417,5 +417,66 @@
             themeBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
         });
     </script>
+
+    <!-- Neon DB / Local Server Script -->
+    <script>
+        // Map Admin Categories to HTML Section IDs
+        const categoryMap = {
+            "Breaking News": "top-stories",
+            "Campus Updates": "world",
+            "Academics": "tech",
+            "Sports": "sports",
+            "Events": "world"
+        };
+
+        // Function to fetch news from your Node.js server
+        async function fetchNews() {
+            try {
+                const response = await fetch('http://localhost:3000/api/news');
+                const newsItems = await response.json();
+                
+                // Clear existing dynamic news to avoid duplicates (simple approach)
+                document.querySelectorAll('.live-update').forEach(el => el.remove());
+
+                // Render items in reverse order so newest is at top
+                newsItems.reverse().forEach(data => {
+                    renderNews(data);
+                });
+            } catch (error) {
+                console.error("Error fetching news:", error);
+            }
+        }
+
+        // Initial load
+        fetchNews();
+        // Poll for updates every 15 seconds
+        setInterval(fetchNews, 15000);
+
+        function renderNews(data) {
+            const sectionId = categoryMap[data.category] || "world";
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+
+            const article = document.createElement('div');
+            article.style.borderBottom = "1px solid #eee";
+            article.style.marginBottom = "1rem";
+            article.style.paddingBottom = "1rem";
+            article.className = "live-update"; // Class for animation if needed
+            
+            article.innerHTML = `
+                <h3 style="margin-bottom: 0.5rem; color: var(--primary);">${data.headline}</h3>
+                <span class="news-meta" style="font-size: 0.8rem; color: #666;">Just Now | ${data.category}</span>
+                <p>${data.content}</p>
+            `;
+
+            // Insert the new article immediately after the Section Title (h1 or h2)
+            const heading = section.querySelector('h1') || section.querySelector('h2');
+            if (heading && heading.nextSibling) {
+                section.insertBefore(article, heading.nextSibling);
+            } else {
+                section.appendChild(article);
+            }
+        }
+    </script>
 </body>
 </html>

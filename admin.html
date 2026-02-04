@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>Admin Dashboard - Me TV</title>
+    <style>
+        :root {
+            --primary: #111111;
+            --accent: #d60000;
+            --light: #f4f4f4;
+            --highlight: #ff3333;
+            --white: #fff;
+        }
+        body.dark-mode {
+            --primary: #e0e0e0;
+            --light: #121212;
+            --white: #1e1e1e;
+            --accent: #ff5252;
+            --highlight: #ff8686;
+        }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--light);
+            color: var(--primary);
+            min-height: 100vh;
+        }
+        header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; }
+        main { max-width: 800px; margin: 2rem auto; padding: 1rem; background: var(--white); border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.1); }
+        h1, h2 { color: var(--accent); }
+        
+        /* Form Styles */
+        .admin-form { display: flex; flex-direction: column; gap: 1rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        label { font-weight: bold; font-size: 0.9rem; }
+        input, textarea, select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        textarea { min-height: 120px; resize: vertical; }
+        
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            align-self: flex-start;
+        }
+        .btn:hover { background: var(--highlight); }
+
+        /* Login Overlay */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .login-box {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen (Simulated for UI layout) -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2 style="margin-top: 0;">Admin Login</h2>
+            <form class="admin-form" id="login-form">
+                <input type="email" id="admin-email" placeholder="Admin Email" required>
+                <input type="password" id="admin-password" placeholder="Password" required>
+                <button type="submit" class="btn" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">Me TV Admin</div>
+        <a href="index.html" style="color: white; text-decoration: none;">View Site &rarr;</a>
+    </header>
+
+    <main>
+        <h1>Post Campus Update</h1>
+        <form id="post-form" class="admin-form">
+            <div class="form-group">
+                <label for="headline">Headline</label>
+                <input type="text" id="headline" placeholder="e.g., Exam Schedule Released" required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category">
+                    <option value="Breaking News">Breaking News</option>
+                    <option value="Campus Updates">Campus Updates</option>
+                    <option value="Academics">Academics</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Events">Events</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="content">Story Content</label>
+                <textarea id="content" placeholder="Write the full story here..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn">Post Update</button>
+        </form>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
+
+        <h2>Recent Posts</h2>
+        <div id="posts-list">
+            <p style="color: #666; font-style: italic;">No posts loaded yet (Database not connected).</p>
+        </div>
+    </main>
+
+    <script>
+        let currentAdminPassword = "";
+
+        // Handle Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('admin-password').value;
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+
+                if (response.ok) {
+                    currentAdminPassword = password;
+                    document.getElementById('login-overlay').style.display = 'none';
+                } else {
+                    alert("Incorrect password");
+                }
+            } catch (err) {
+                alert("Login error: " + err.message);
+            }
+        });
+
+        document.getElementById('post-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.disabled = true;
+            btn.textContent = "Posting...";
+
+            const newsData = {
+                headline: document.getElementById('headline').value,
+                category: document.getElementById('category').value,
+                content: document.getElementById('content').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/news', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'admin-password': currentAdminPassword
+                    },
+                    body: JSON.stringify(newsData)
+                });
+
+                if (response.ok) {
+                    alert("News posted successfully!");
+                    e.target.reset();
+                } else {
+                    throw new Error('Server responded with an error');
+                }
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Error posting news: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Post Update";
+            }
+        });
+    </script>
+</body>
+</html>

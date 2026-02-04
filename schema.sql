@@ -1,0 +1,7 @@
+CREATE TABLE news (
+    id SERIAL PRIMARY KEY,
+    headline TEXT NOT NULL,
+    category TEXT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
